@@ -11,29 +11,7 @@ Servo servo_elbow;
 Servo servo_shoulder;
 Servo servo_base;
 
-
-//commands for servos
-//arm up, down, buttons released
-//Y up, A down
-String grabber_commands[] = {"b21","b01","b20","b00"};
-
-//claw open, claw close, buttons released
-//Left bumper open, Right bumper close
-String swivel_commands[] = {"b51","b41","b50","b40"};
-
-//ramp up, ramp down, buttons released
-//Left trigger up, Right trigger down
-String wrist_commands[] = {"ty8","tx8"};
-
-String elbow_commands[] = {"ey8","ex8"}; // temp commands
-
-//base up, base down, buttons released
-//Left joystick up, Left joystick down
-String shoulder_commands[] = {"y-6","y+6"};
-
-//joints up, joints down, buttons released
-//Right joystick up, Right joystick down
-String base_commands[] = {"r-6","r+6"};
+Servo servos [6] = {servo_grabber,servo_swivel,servo_wrist,servo_elbow,servo_shoulder,servo_base};
 
 String command;
 
@@ -62,21 +40,29 @@ void setup()
   servo_elbow.attach(5);
   servo_shoulder.attach(6);
   servo_base.attach(7);
+
+  servo_grabber.write(10);
+  servo_swivel.write(120);
+  servo_wrist.write(15);
+  servo_elbow.write(120);
+  servo_shoulder.write(35);
+  servo_base.write(150);
+
 }
 
 void loop()
 {
     while (Serial.available() > 0) {
     int inChar = Serial.read();
-    if (inChar != 'L' ) {
+    if (inChar != 'L' || inChar != '\'' || inChar != 'b') {
       // convert the incoming byte to a char and add it to the string:
       command += (char)inChar;
-      //Serial.println(command);
     }
     // if you get a newline, print the string, then the string's value:
-    if(inChar == 'L'){
-      break;   
-    }
+    else if(inChar == 'L' || inChar == '\n')
+    break;
+      
+    
   }
 
     //Move grabber to the postition recieved from 
@@ -104,13 +90,15 @@ void loop()
       location = command.substring(2).toInt();
       servo_shoulder.write(location);
     }
-    if(command[0] == 'b')
+    if(command[0] == 't')
     {
       location = command.substring(1).toInt();
       servo_grabber.write(location);
     }
     if(command == "reset"){
+      
       //loop through the servos to reset them all
+      servo_grabber.write(0);
     }
   command = " ";
   }

@@ -22,9 +22,9 @@ joystick.init()
 ser = serial.Serial('COM7',9600)
 
 #increment variables
-start_pos = [-15, 120, 15, 120, 35, 150]
-servo_pos = [-15, 120, 15, 120, 35, 150]
-command = ['g','sw','w','e','sh','b']
+start_pos = [0, 120, 15, 120, 35, 150]
+servo_pos = [0, 120, 15, 120, 35, 150]
+command = ['g','sw','w','e','sh','t']
 #string for concatinating the commmand
 text = " "
 
@@ -152,72 +152,72 @@ while(running):
         #concatinate the string all together and add an L to the end so
         #the Arduino can tell when the end of the command is
         data = command[0] + str(servo_pos[0]) +"L"
-        print(data)
+        print(data.encode())
         ser.write(data.encode())
-    elif base_mv_opp and servo_pos[0] >= -15:
+    elif base_mv_opp and servo_pos[0] > 0:
         servo_pos[0] -= b_mv
         data = command[0] + str(servo_pos[0])+"L"
-        print(data)
+        print(data.encode())
         ser.write(data.encode())
 
     #Shoulders - left stick, up/down
     if shoulder_mv and servo_pos[1] <= 130:
         servo_pos[1] += s_mv
         data = command[1] + str(servo_pos[1])+"L"
-        print(data)
+        print(data.encode())
         ser.write(data.encode())
-    elif shoulder_mv_opp and servo_pos[1] >= 0:
+    elif shoulder_mv_opp and servo_pos[1] > 0:
         servo_pos[1] -= s_mv
         data = command[1] + str(servo_pos[1])+"L"
-        print(data)
+        print(data.encode())
         ser.write(data.encode())
 
     #elbow - right stick, up/down
     if elbow_mv and servo_pos[2] <= 100:
         servo_pos[2] += e_mv
         data = command[2] + str(servo_pos[2])+"L"
-        print(data)
+        print(data.encode())
         ser.write(data.encode())
-    elif elbow_mv_opp and servo_pos[2] >= 0:
+    elif elbow_mv_opp and servo_pos[2] > 0:
         servo_pos[2] -= e_mv
         data = command[2] + str(servo_pos[2])+"L"
-        print(data)
+        print(data.encode())
         ser.write(data.encode())
 
     #wrist joint - A and Y, A down Y up
     if swivel_mv and servo_pos[3] <= 170:
         servo_pos[3] += sw_mv
         data = command[3] + str(servo_pos[3])+"L"
-        print(data)
+        print(data.encode())
         ser.write(data.encode())
     elif swivel_mv_opp and servo_pos[3] >= 10:
         servo_pos[3] -= sw_mv
         data = command[3] + str(servo_pos[3])+"L"
-        print(data)
+        print(data.encode())
         ser.write(data.encode())
 
     #wrist swivel - RB and LB, RB left (CCW) LB right (CW)
     if wrist_mv and servo_pos[4] <= 180:
         servo_pos[4] += w_mv
         data = command[4] + str(servo_pos[4])+"L"
-        print(data)
+        print(data.encode())
         ser.write(data.encode())
-    elif wrist_mv_opp and servo_pos[4] >= 0:
+    elif wrist_mv_opp and servo_pos[4] > 0:
         servo_pos[4] -= w_mv
         data = command[4] + str(servo_pos[4])+"L"
-        print(data)
+        print(data.encode())
         ser.write(data.encode())
 
     #gripper - Left trigger open, right trigger close
     if gripper_mv and servo_pos[5] <= 170:
         servo_pos[5] += g_mv
         data = command[5] + str(servo_pos[5])+"L"
-        print(data)
+        print(data.encode())
         ser.write(data.encode())
-    elif gripper_mv_opp and servo_pos[5] >= 0:
+    elif gripper_mv_opp and servo_pos[5] > 0:
         servo_pos[5] -= g_mv
         data = command[5] + str(servo_pos[5])+"L"
-        print(data)
+        print(data.encode())
         ser.write(data.encode())
 
     
